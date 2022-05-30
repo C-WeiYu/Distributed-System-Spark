@@ -1,0 +1,2 @@
+*.gz”[[:space:]] filter=lfs diff=lfs merge=lfs -text
+*.tgz”[[:space:]] filter=lfs diff=lfs merge=lfs -text

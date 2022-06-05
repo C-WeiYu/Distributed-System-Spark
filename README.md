@@ -39,3 +39,13 @@
 - influxdb
 
 - 視覺化 Dashboard
+
+## Contributors
+|組員|系級|學號|工作分配|github|
+|-|-|-|-|-|
+|莊崴宇|資科碩一|110753117| Pyspark、簡報 | [C-WeiYu](https://github.com/C-WeiYu)|
+|何彥南|資科碩一|110753202| Spark 叢集 | [aaron1aaron2](https://github.com/aaron1aaron2)|
+|吳仁凱|資科碩一|110753135| Pyspark | |
+|張修誠|資科碩一| | 爬蟲 | |
+|吳泓澈|資科碩一| | InfluxDB | |
+

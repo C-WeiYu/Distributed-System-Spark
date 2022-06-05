@@ -24,13 +24,19 @@ vagrant ssh spark-node1
 
 6. 啟動 Spark cluster
 ```
-sudo chown -R vagrant:vagrant /opt 
-
-source /opt/spark-3.2/sbin/start-all.sh
+sudo $SPARK_HOME/sbin/start-master.sh
 ```
 
-5. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ 去監控 VM 中的 Spark cluster。(10.0.1.101 為 master-node IP)
+7. 依序進入到 worker 節點的 VM，下面以 spark-node2 為例。 (預設 spark-node2 ~ n 為 worker)
 
+```
+vagrant ssh spark-node2
+```
+```
+sudo $SPARK_HOME/sbin/start-worker.sh spark://$MASTERIP:7077
+```
+8. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ 去監控 VM 中的 Spark cluster。(10.0.1.101 為 master-node IP)
+![](sparkUI.png)
 ### InfluxDB
 
 

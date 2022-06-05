@@ -36,7 +36,9 @@ vagrant ssh spark-node2
 sudo $SPARK_HOME/sbin/start-worker.sh spark://$MASTERIP:7077
 ```
 8. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ 去監控 VM 中的 Spark cluster。(10.0.1.101 為 master-node IP)
+
 ![](img/sparkUI.png)
+
 ### InfluxDB
 
 

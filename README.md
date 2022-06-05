@@ -18,7 +18,7 @@ vagrant up
 ```
 source /opt/spark-3.2/sbin/start-all.sh
 ```
-4. 可以在 local 的電腦監控 VM 中的 Spark cluster
+4. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ (10.0.1.101 為 master-node IP) 去監控 VM 中的 Spark cluster
 
 ### InfluxDB
 

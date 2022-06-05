@@ -11,14 +11,17 @@
 ```shell
 git clone https://github.com/C-WeiYu/Distributed-System-Spark.git
 cd Distributed-System-Spark
-
+```
+3. 透過 `Vagrantfile` 建立 spark cluster VM。(可以更改 `Vagrantfile` 的 num_nodes 設定總共要建立幾個工作節點)
+```shell
 vagrant up
 ```
-3. 啟動 Spark cluster
+
+4. 啟動 Spark cluster
 ```
 source /opt/spark-3.2/sbin/start-all.sh
 ```
-4. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ (10.0.1.101 為 master-node IP) 去監控 VM 中的 Spark cluster
+5. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ 去監控 VM 中的 Spark cluster。(10.0.1.101 為 master-node IP)
 
 ### InfluxDB
 

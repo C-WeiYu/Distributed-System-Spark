@@ -5,12 +5,21 @@
 
 ## Dev Environment
 ### Spark cluster
+1. 先安裝好 [Vagrant](https://www.vagrantup.com/) 、 [git](https://git-scm.com/) 、[git-lfs](https://git-lfs.github.com/)
 
+2. 執行下列命令或直接下載 zip 檔:
+```shell
+git clone https://github.com/C-WeiYu/Distributed-System-Spark.git
+```
+3. 
 
 ### InfluxDB
 
 
 ### Python packages
+```shell
+sudo pip3 install -r requirements.txt
+```
 
 ### Version info 
 |軟體|版本|網址|備註|

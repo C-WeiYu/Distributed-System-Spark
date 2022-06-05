@@ -12,7 +12,7 @@
 
 ### Python packages
 
-### version info 
+### Version info 
 |軟體|版本|網址|備註|
 |:-:|-|-|-|
 |JAVA| JDK8(linux、x86 64bit)| [OpenLogic’s OpenJDK Downloads](https://www.openlogic.com/openjdk-downloads?field_java_parent_version_target_id=416&field_operating_system_target_id=426&field_architecture_target_id=391&field_java_package_target_id=396) | 可使用: Java 8/11, Scala 2.12/2.13|

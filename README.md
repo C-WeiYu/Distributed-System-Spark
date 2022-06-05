@@ -17,10 +17,18 @@ cd Distributed-System-Spark
 vagrant up
 ```
 
-4. 啟動 Spark cluster
+4. 進入到 master 節點的 VM。 (預設 spark-node1 為 master)
 ```
+vagrant ssh spark-node1
+```
+
+6. 啟動 Spark cluster
+```
+sudo chown -R vagrant:vagrant /opt 
+
 source /opt/spark-3.2/sbin/start-all.sh
 ```
+
 5. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ 去監控 VM 中的 Spark cluster。(10.0.1.101 為 master-node IP)
 
 ### InfluxDB

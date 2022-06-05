@@ -12,6 +12,15 @@
 
 ### Python packages
 
+### version info 
+|軟體|版本|網址|備註|
+|-|-|-|-|
+|JAVA| JDK8(linux、x86 64bit)| [OpenLogic’s OpenJDK Downloads](https://www.openlogic.com/openjdk-downloads?field_java_parent_version_target_id=416&field_operating_system_target_id=426&field_architecture_target_id=391&field_java_package_target_id=396) | 可使用: Java 8/11, Scala 2.12/2.13|
+|Spark| 3.2.1(hadoop3.2) | [Downloads \| Apache Spark](https://spark.apache.org/downloads.html) ||
+|Python| 3.6+ |||
+|Vagrant| 2.2.19 | [Vagrant by HashiCorp (vagrantup.com)](https://www.vagrantup.com/) ||
+|InfluxDB||||
+
 ## Quick start
 
 

@@ -7,11 +7,18 @@
 ### Spark cluster
 1. 先安裝好 [Vagrant](https://www.vagrantup.com/) 、 [git](https://git-scm.com/) 、[git-lfs](https://git-lfs.github.com/)
 
-2. 執行下列命令或直接下載 zip 檔:
+2. 執行下列命令:
 ```shell
 git clone https://github.com/C-WeiYu/Distributed-System-Spark.git
+cd Distributed-System-Spark
+
+vagrant up
 ```
-3. 
+3. 啟動 Spark cluster
+```
+source /opt/spark-3.2/sbin/start-all.sh
+```
+4. 可以在 local 的電腦監控 VM 中的 Spark cluster
 
 ### InfluxDB
 

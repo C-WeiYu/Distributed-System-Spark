@@ -1,9 +1,11 @@
-#!/bin/bash
+# #!/bin/bash
 set -xe
-cp /opt/spark-3.2/conf/workers.template /opt/spark-3.2/conf/slaves
 
-cat >> /opt/spark-3.2/conf/slaves << EOF
-spark-node1
-spark-node2
-EOF
+sudo chown -R vagrant:vagrant /root/ # 把資料夾權限轉移，方便後續存取
 
+echo -e "\n\n\n" | ssh-keygen # 三次 enter
+
+sudo mkdir -p /share/key # -p 如果不存在才建立
+
+sudo cp -f /root/.ssh/id_rsa.pub /share/key/id_rsa.pub
+sudo cp -f /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys

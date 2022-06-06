@@ -84,13 +84,13 @@ sudo pip3 install -r requirements.txt
 - influxdb
 
 - 視覺化 Dashboard
-
+    - [初學Pandas+Ploty+Dash大禮包](https://www.runoob.com/ruby/ruby-tutorial.html](https://weilihmen.medium.com/%E5%88%9D%E5%AD%B8pandas-ploty-dash%E5%A4%A7%E7%A6%AE%E5%8C%85-8661c04e67b7)
 ## Contributors
 |組員|系級|學號|工作分配|github|
 |-|-|-|-|:-:|
 |莊崴宇|資科碩一|110753117| 簡報、github | [C-WeiYu](https://github.com/C-WeiYu)|
 |何彥南|資科碩一|110753202| Spark 叢集、github | [aaron1aaron2](https://github.com/aaron1aaron2)|
-|姚惠馨|資科碩一|110753135| Dashboard | |
+|姚惠馨|資科碩一|110753135| Dashboard | [Hsin0705](https://github.com/Hsin0705)|
 |吳仁凱|資科碩一| | Pyspark | |
 |張修誠|資科碩一| | 爬蟲 | |
 |吳泓澈|資科碩一| | InfluxDB | |

@@ -17,17 +17,15 @@ cd Distributed-System-Spark
 vagrant up
 ```
 
-4. 進入到 master 節點的 VM。 (預設 spark-node1 為 master)
+4. 進入到 master 節點的 VM，啟動 master 節點。 (預設 spark-node1 為 master)
 ```
 vagrant ssh spark-node1
 ```
-
-6. 啟動 Spark cluster
 ```
 sudo $SPARK_HOME/sbin/start-master.sh
 ```
 
-7. 依序進入到 worker 節點的 VM，下面以 spark-node2 為例。 (預設 spark-node2 ~ n 為 worker)
+5. 依序進入到 worker 節點的 VM，下面以 spark-node2 為例。 (預設 spark-node2、spark-node... 為 worker)
 
 ```
 vagrant ssh spark-node2
@@ -35,7 +33,7 @@ vagrant ssh spark-node2
 ```
 sudo $SPARK_HOME/sbin/start-worker.sh spark://$MASTERIP:7077
 ```
-8. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ 去監控 VM 中的 Spark cluster。(10.0.1.101 為 master-node IP)
+6. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ 去監控 VM 中的 Spark cluster。(10.0.1.101 為 master-node IP)
 
 ![](img/sparkUI.png)
 

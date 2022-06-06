@@ -84,7 +84,8 @@ sudo pip3 install -r requirements.txt
 - influxdb
 
 - 視覺化 Dashboard
-    - [初學Pandas+Ploty+Dash大禮包](https://www.runoob.com/ruby/ruby-tutorial.html](https://weilihmen.medium.com/%E5%88%9D%E5%AD%B8pandas-ploty-dash%E5%A4%A7%E7%A6%AE%E5%8C%85-8661c04e67b7)
+    - plotly + Dash
+      - [初學Pandas+Plotly+Dash大禮包](https://weilihmen.medium.com/%E5%88%9D%E5%AD%B8pandas-ploty-dash%E5%A4%A7%E7%A6%AE%E5%8C%85-8661c04e67b7)
 ## Contributors
 |組員|系級|學號|工作分配|github|
 |-|-|-|-|:-:|

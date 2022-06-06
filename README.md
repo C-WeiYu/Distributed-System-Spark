@@ -4,7 +4,7 @@
 ![](img/%E6%9E%B6%E6%A7%8B%E5%9C%96.v2.png)
 
 ## Dev Environment
-### Spark cluster
+### Spark cluster(VM - Ubuntu)
 1. 先安裝好 [Vagrant](https://www.vagrantup.com/) 、 [git](https://git-scm.com/) 、[git-lfs](https://git-lfs.github.com/)
 
 2. 執行下列命令:
@@ -18,31 +18,44 @@ vagrant up
 ```
 
 4. 進入到 master 節點的 VM，啟動 master 節點。 (預設 spark-node1 為 master)
-```
+```shell
 vagrant ssh spark-node1
 ```
-```
+```shell
 sudo $SPARK_HOME/sbin/start-master.sh
 ```
 
 5. 依序進入到 worker 節點的 VM，下面以 spark-node2 為例。 (預設 spark-node2、spark-node... 為 worker)
 
-```
+```shell
 vagrant ssh spark-node2
 ```
-```
+```shell
 sudo $SPARK_HOME/sbin/start-worker.sh spark://$MASTERIP:7077
 ```
 6. 可以到 local 的電腦，進到 http://10.0.1.101:8080/ 去監控 VM 中的 Spark cluster。(10.0.1.101 為 master-node IP)
 
 ![](img/sparkUI.png)
 
-### InfluxDB
+7. 安裝所需的 python 套件
 
-
-### Python packages
 ```shell
 sudo pip3 install -r requirements.txt
+```
+
+### InfluxDB(AWS)
+
+
+### Local computer(Win10)
+1. 建立乾淨的 python 環境。(conda 為例也可以使用 virtualenv)
+```shell
+conda create --name env python=3.6
+conda activate env
+```
+
+2. 安裝需要的套件。
+```shell
+pip install -r requirements.txt
 ```
 
 ### Version info 

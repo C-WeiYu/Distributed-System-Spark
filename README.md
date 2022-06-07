@@ -1,7 +1,14 @@
 # Distributed-System-Spark
 
-## Architecture diagram
+## Introduction
 ![](img/%E6%9E%B6%E6%A7%8B%E5%9C%96.v2.png)
+### Stock Data Crawler
+
+### InfluxDB
+
+### Spark Cluster & Regression Prediction
+
+### Visual Design
 
 ## Dev Environment
 ### Spark cluster(VM - Ubuntu)

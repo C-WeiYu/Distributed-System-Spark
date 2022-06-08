@@ -96,6 +96,8 @@ pip install -r requirements.txt
   - Ruby (vagrantfile)
     - [Ruby 程式語言入門 - Rails 實戰聖經 (ihower.tw)](https://ihower.tw/rails/ruby.html)
     - [Ruby 教程 | 菜鸟教程 (runoob.com)](https://www.runoob.com/ruby/ruby-tutorial.html)
+  - Pyspark
+    - [How to Spark Submit Python | PySpark File (.py)? - Spark by {Examples} (sparkbyexamples.com)](https://sparkbyexamples.com/pyspark/spark-submit-python-file/)
 - 爬蟲
 
 

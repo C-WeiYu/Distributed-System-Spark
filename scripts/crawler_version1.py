@@ -31,7 +31,7 @@ def updatedb(stringdata,tablename):
 #api connect
 
 
-mykey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRlIjoiMjAyMi0wNS0yMiAxNjo0MToxMyIsInVzZXJfaWQiOiJqdXpvd2EiLCJpcCI6IjExOC4xNjMuOC42MCJ9.xoeKaojxUrO9QHu7MT9Mf5X6J8DifP2IQwiQFRoFSiQ"
+mykey = ""
 
 url = "https://api.web.finmindtrade.com/v2/user_info"
 parload = {

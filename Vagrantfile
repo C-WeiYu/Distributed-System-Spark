@@ -1,7 +1,12 @@
 # -*- mode: ruby -*-
-# vagrant box add my-box bionic-server-cloudimg-amd64-vagrant.box # 先載下來裝比較快，bionic64 資源 https://app.vagrantup.com/ubuntu/boxes/bionic64
-# $ vagrant box add mybox
+=begin
+Author: yen-nan ho
+Github: https://github.com/aaron1aaron2
+Date: 2022.06.09
+=end
+
 Vagrant.configure("2") do |config|
+  # 全域變數
   $num_nodes = 3 # 控制總共要幾個節點
   $masterIP = 0 # 紀錄 master 節點 ip
   $share_folder = "/home/vagrant/Distributed-System-Spark"

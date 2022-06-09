@@ -77,8 +77,9 @@ pip install -r requirements.txt
 |InfluxDB||||
 
 ## Quick start
-
-
+在開始前，請確定設定好環境(看上一章 [Dev Environment](README.md#dev-environment))
+### Step1: 
+python scripts/stock_dash.py
 ## Demo
 
 

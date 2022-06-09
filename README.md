@@ -78,8 +78,13 @@ pip install -r requirements.txt
 
 ## Quick start
 在開始前，請確定設定好環境(看上一章 [Dev Environment](README.md#dev-environment))
-### Step1: 
+### Step1: 在 local 開啟視覺化 dashbord
+```
 python scripts/stock_dash.py
+```
+### Step2: DEMO 版面配置
+![]
+
 ## Demo
 
 

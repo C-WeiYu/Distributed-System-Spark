@@ -31,7 +31,7 @@ def updatedb(stringdata,tablename):
 #api connect
 
 
-mykey = ""
+mykey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRlIjoiMjAyMi0wNS0yMiAxNjo0MToxMyIsInVzZXJfaWQiOiJqdXpvd2EiLCJpcCI6IjExOC4xNjMuOC42MCJ9.xoeKaojxUrO9QHu7MT9Mf5X6J8DifP2IQwiQFRoFSiQ"
 
 url = "https://api.web.finmindtrade.com/v2/user_info"
 parload = {
@@ -61,9 +61,9 @@ preday = 0
 client = InfluxDBClient('54.180.25.155',8086,'','','stock_data')
 #撈取爬蟲TABLE的資料
 web_crawler_data = client.query('select * from web_crawler_data')
-if len(list(web_crawler_data.get_points()))==0:
+if len(list(web_crawler_data.get_points()))==0:#database no data
     print("file empty")
-else:#get last line date 
+else:#database have data and get last line date 
     last_line = list(web_crawler_data.get_points())[-1]['value']
     print("file last line:",last_line)
     preday=pd.to_datetime(last_line.split()[-4]+" "+last_line.split()[-3], format='%Y-%m-%d %H:%M:%S.%f')
@@ -77,10 +77,10 @@ while True:
         resp = requests.get(url, params=parameter,timeout=5)
         data = resp.json()      
         data = pd.DataFrame(data["data"])
-        #empty file add header and write data
-        if data.empty:
+        if data.empty:#no data return call spark
             print("no data")
             print(datetime.datetime.now())
+            os.system(f'python3 /share/scripts/spark_predict.py --datetime {datetime.datetime.now()} --his_num {10}')
         else:
             if flag == 0:
                 dateformat=pd.to_datetime(data["date"], format='%Y-%m-%d %H:%M:%S.%f')
@@ -92,7 +92,7 @@ while True:
                 print(updatedb(dfAsString,"prediction_data"))
                 preday = dateformat
                 flag=1
-            #check datetime is same or not to wrtie file
+            #check datetime is same or not to wrtie back database
             else:
                 dateformat=pd.to_datetime(data["date"], format='%Y-%m-%d %H:%M:%S.%f')
                 print("predatatime:",preday)
@@ -105,19 +105,21 @@ while True:
                     print("prediction_data update:")
                     print(updatedb(dfAsString,"prediction_data"))
                     preday = dateformat
-                else:
+                else:#over 5 second data duplicate call spark
                     print("Before 5 second:",preday)
                     preday = preday + datetime.timedelta(seconds=5)
                     print("over 5 second data still duplicate")
                     print("after 5 second:",preday)
-                
+                    os.system(f'python3 /share/scripts/spark_predict.py --datetime {preday} --his_num {10}')             
             print("--------------end--------------")
             i=i+1
             sleep(5)
-    except requests.exceptions.Timeout:
+    except requests.exceptions.Timeout:#call api error call spark
         print("timeouterror")
         print(datetime.datetime.now())
-    except requests.exceptions.RequestException as e:
+        os.system(f'python3 /share/scripts/spark_predict.py --datetime {datetime.datetime.now()} --his_num {10}')
+    except requests.exceptions.RequestException as e:#call api error call spark
         print("requesterror")
         print(datetime.datetime.now())
+        os.system(f'python3 /share/scripts/spark_predict.py --datetime {datetime.datetime.now()} --his_num {10}')
 

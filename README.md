@@ -83,7 +83,8 @@ pip install -r requirements.txt
 python scripts/stock_dash.py
 ```
 ### Step2: DEMO 版面配置
-![]
+![](img/DEMO版面.png)
+
 
 ## Demo
 

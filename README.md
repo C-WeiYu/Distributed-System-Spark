@@ -79,12 +79,21 @@ pip install -r requirements.txt
 ## Quick start
 在開始前，請確定設定好環境(看上一章 [Dev Environment](README.md#dev-environment))
 ### Step1: 在 local 開啟視覺化 dashbord
-```
+```shell
 python scripts/stock_dash.py
 ```
 ### Step2: DEMO 版面配置
 ![](img/DEMO版面.png)
+- **Local**: 跑視覺化 dashboard，透過瀏覽器開啟。
+- **Spark UI**: Spark 內建，監控 spark cluster 的狀態，master node 執行後就可以在 local 的瀏覽器透過 http://10.0.1.101:8080/
+- **Master**: 主要節點，負責執行爬蟲程式和 pyspark 預測資料
+- **Worker**: 工作節點，負責執行 master 派下來的工作，這邊使用 `htop` 開啟效能監控，可以呈現資源使用的狀態。
 
+### Step3: master 的 VM 執行爬蟲程式
+```shell
+python3 scripts/crawler_version1.py
+```
+- 註: 因目標是爬取股市資料，9:00 -13:30 才會有資料
 
 ## Demo
 

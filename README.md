@@ -44,9 +44,10 @@ sudo $SPARK_HOME/sbin/start-worker.sh spark://$MASTERIP:7077
 
 ![](img/sparkUI.png)
 
-7. 安裝所需的 python 套件
+7. 在 master 安裝所需的 python 套件。
 
 ```shell
+cd Distributed-System-Spark
 sudo pip3 install -r requirements.txt
 ```
 

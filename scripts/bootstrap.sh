@@ -55,9 +55,13 @@ sudo systemctl disable firewalld
 # pyspark 環境 ===============================================
 sudo apt -y install python3-pip # sudo yum install -y python3
 
-# sudo pip3 install pyspark 
-# sudo pip3 install findspark
+# 每個節點都需要
+sudo pip3 install pyspark 
+sudo pip3 install findspark
+if [ $masterIP = $IP ] then
 sudo pip3 install -r $shareFolder/requirements.txt
+fi
+
 
 # spark & java 環境 ===============================================
 sudo chown -R vagrant:vagrant /opt/ # 把資料夾權限轉移，方便後續存取

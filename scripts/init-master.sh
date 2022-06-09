@@ -14,7 +14,7 @@ sudo chown -R vagrant:vagrant /root/ # 把資料夾權限轉移，方便後續�
 
 echo -e "\n\n\n" | ssh-keygen # 三次 enter
 
-sudo mkdir -p /share/key # -p 如果不存在才建立
+sudo mkdir -p $shareFolder/key # -p 如果不存在才建立
 
 sudo cp -f /root/.ssh/id_rsa.pub $shareFolder/key/id_rsa.pub
 sudo cp -f /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys

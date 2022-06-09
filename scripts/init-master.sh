@@ -1,4 +1,11 @@
+# ============================================
+# Author: yen-nan ho
+# Github: https://github.com/aaron1aaron2
+# Date: 2022.06.09
+# ============================================
+
 # #!/bin/bash
+
 set -xe
 
 shareFolder=$1

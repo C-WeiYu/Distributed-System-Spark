@@ -1,3 +1,10 @@
+# coding: utf-8
+"""
+Author: yen-nan ho、吳仁凱
+Github: https://github.com/aaron1aaron2、https://github.com/k0341055
+Date: 2022.06.09
+"""
+
 import os
 
 MASTER_IP = os.getenv('MASTERIP')

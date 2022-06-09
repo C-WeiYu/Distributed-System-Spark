@@ -1,3 +1,10 @@
+# coding: utf-8
+"""
+Author: 張修成
+Github: https://github.com/juzowa
+Date: 2022.06.09
+"""
+
 from time import sleep
 from os.path import exists
 import pandas as pd

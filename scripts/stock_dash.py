@@ -1,8 +1,9 @@
-#!/usr/bin/env python
 # coding: utf-8
-
-# In[15]:
-
+"""
+Author: 姚惠馨
+Github: https://github.com/Hsin0705
+Date: 2022.06.06
+"""
 
 from influxdb import InfluxDBClient
 import dash
@@ -97,10 +98,3 @@ def update(n):
 
 if __name__ == "__main__":
     app.run_server(debug=True)
-
-
-# In[ ]:
-
-
-
-

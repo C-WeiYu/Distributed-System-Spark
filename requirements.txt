@@ -3,5 +3,5 @@ dash==2.4.1
 plotly_express==0.4.1
 pandas #1.4.2 | 1.1.5 on unbutu
 plotly==5.8.0
-pyspark==3.2.1
-findspark==2.0.1
+# pyspark==3.2.1
+# findspark==2.0.1

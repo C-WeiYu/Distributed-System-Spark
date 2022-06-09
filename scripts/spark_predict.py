@@ -6,6 +6,7 @@ Date: 2022.06.09
 """
 
 import os
+from sre_constants import SUCCESS
 
 MASTER_IP = os.getenv('MASTERIP')
 SPARK_HOME = os.getenv('SPARK_HOME')
@@ -30,7 +31,8 @@ from pyspark.ml import Pipeline
 def get_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--datetime", help = "缺失時間", type = str, default = '2022-06-07 13:24:16.550')
+    parser.add_argument("--date", help = "缺失日期", type = str, default = '2022-06-07')
+    parser.add_argument("--time", help = "缺失時間", type = str, default = '13:24:16.550')
     parser.add_argument("--his_num", help = "預測依據的筆數", type = int, default = 10)
     parser.add_argument("--his_ws", help = "預測依據的筆數", type = int, default = 3)
     
@@ -59,7 +61,7 @@ def get_data(client, miss_datetime, his_num, his_ws):
         time.sleep(1)
     
     # teststdata = teststdata[::-1] #反序時間成由早到晚
-    teststdata.append('0.0')
+    teststdata.append(teststdata[-1])
     tmp = []
     for i in range(his_num + 1):
         tmp.append(teststdata[i: i + his_ws])
@@ -85,12 +87,12 @@ def predict_price(miss_datetime, data, columns):
     df = spark.createDataFrame(data, schema = columns)
     columns.remove('T') # Label
     # train_data, test_data = df.randomSplit([0.9, 0.1], 2) # 會亂掉
-    train_data = df.limit(df.count()-1)
+    train_data = df.limit(df.count()-2)
     test_data = df.subtract(train_data) # 確定是要預測的那筆
 
     #build model
     vecass = VectorAssembler(inputCols=columns, outputCol='features')
-    lr = LinearRegression(featuresCol = 'features', labelCol='T', maxIter=5, regParam=0.3, elasticNetParam=0)
+    lr = LinearRegression(featuresCol = 'features', labelCol='T', maxIter=1, regParam=0.3, elasticNetParam=0)
     lr_pipeline = Pipeline(stages=[vecass, lr])
     
     # 預測
@@ -105,40 +107,54 @@ def predict_price(miss_datetime, data, columns):
     # print('rmse :',rmse)
 
     #把預測結果寫入db的test表中
-    result = [
-        {
-            "measurement" : "prediction_data",
-            "tags": {
-                "topic": "stock2330_data"
-            },
-            "fields": {
-                "value": 'na '*6+str(predicted.collect()[-1].pred)+' na'*10 + ' ' + str(miss_datetime) + ' 2330 *'
+    try:
+        result = [
+            {
+                "measurement" : "prediction_data",
+                "tags": {
+                    "topic": "stock2330_data"
+                },
+                "fields": {
+                    "value": 'na '*6+str(predicted.collect()[-1].pred)+' na'*10 + ' ' + str(miss_datetime) + ' 2330 *'
+                }
             }
-        }
-    ]
+        ]
+        statu = True
+    except:
+        result = []
+        statu = False
 
-    return result, time.time() - start_time
+    return result, time.time() - start_time, statu
 
-def write_data(client, result):
+def write_data(client, result, statu):
     start_time = time.time()
-    client.write_points(result)
+    if statu:
+        client.write_points(result)
+        print('SUCCESS')
+    else:
+        print('FALSE')
 
     return time.time() - start_time
 
 def main():
+    print('------------- Spark running -------------')
     args = get_args()
 
-    miss_datetime = datetime.strptime(args.datetime, "%Y-%m-%d  %H:%M:%S.%f")
+    miss_datetime = datetime.strptime(f"{args.date} {args.time}", "%Y-%m-%d  %H:%M:%S.%f")
 
     client = InfluxDBClient('54.180.25.155',8086,'','','stock_data') #InfluxDBClient(資料庫IP,資料庫PORT,帳號,密碼,DB名稱)
 
     data, columns, DBread_timeuse = get_data(client, miss_datetime, args.his_num, args.his_ws)
 
-    result, spark_timeuse = predict_price(miss_datetime, data, columns)
+    result, spark_timeuse, statu = predict_price(miss_datetime, data, columns)
 
-    DBwrite_timeuse = write_data(client, result)
+    DBwrite_timeuse = write_data(client, result, statu)
 
-    print('--- linear regression takes %.2f seconds ---' % (round(DBread_timeuse + spark_timeuse + DBwrite_timeuse,2)))
+    print('--- Spark_timeuse: %.2f (sec) | DBread_timeuse: %.2f (sec)| DBwrite_timeuse: %.2f (sec) | Statu: %s ---' % (
+        round(spark_timeuse, 2),
+        round(DBread_timeuse, 2),
+        round(DBwrite_timeuse,2),
+        statu))
 
 if __name__ == "__main__":
     main()

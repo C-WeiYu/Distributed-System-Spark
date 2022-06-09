@@ -85,9 +85,11 @@ while True:
         data = resp.json()      
         data = pd.DataFrame(data["data"])
         if data.empty:#no data return call spark
+            curr_time = str(curr_time).split(' ')
             print("no data")
-            print(datetime.datetime.now())
-            os.system(f'python3 scripts/spark_predict.py --datetime {datetime.datetime.now()} --his_num {10}')
+            curr_time = str(curr_time).split(' ')
+            print(curr_time)
+            os.system(f'python3 scripts/spark_predict.py --date {curr_time[0]} --time {curr_time[1]} --his_num {10}')
         else:
             if flag == 0:
                 dateformat=pd.to_datetime(data["date"], format='%Y-%m-%d %H:%M:%S.%f')
@@ -117,16 +119,19 @@ while True:
                     preday = preday + datetime.timedelta(seconds=5)
                     print("over 5 second data still duplicate")
                     print("after 5 second:",preday)
-                    os.system(f'python3 scripts/spark_predict.py --datetime {preday} --his_num {10}')             
+                    pre_time = str(preday).split(' ')
+                    os.system(f'python3 scripts/spark_predict.py --date {pre_time[0]} --time {pre_time[1]}.0 --his_num {10}')             
             print("--------------end--------------")
             i=i+1
             sleep(5)
     except requests.exceptions.Timeout:#call api error call spark
         print("timeouterror")
-        print(datetime.datetime.now())
-        os.system(f'python3 scripts/spark_predict.py --datetime {datetime.datetime.now()} --his_num {10}')
+        curr_time = str(curr_time).split(' ')
+        print(curr_time)
+        os.system(f'python3 scripts/spark_predict.py --date {curr_time[0]} --time {curr_time[1]} --his_num {10}')
     except requests.exceptions.RequestException as e:#call api error call spark
         print("requesterror")
-        print(datetime.datetime.now())
-        os.system(f'python3 scripts/spark_predict.py --datetime {datetime.datetime.now()} --his_num {10}')
+        curr_time = str(curr_time).split(' ')
+        print(curr_time)
+        os.system(f'python3 scripts/spark_predict.py --date {curr_time[0]} --time {curr_time[1]} --his_num {10}')
 

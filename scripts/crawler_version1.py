@@ -5,14 +5,14 @@ Github: https://github.com/juzowa
 Date: 2022.06.09
 """
 
-from time import sleep
+import time
 from os.path import exists
 import pandas as pd
 import os
 import requests
 from influxdb import InfluxDBClient
 import datetime
-
+import random
 
 def updatedb(stringdata,tablename):
     #db connect
@@ -32,6 +32,7 @@ def updatedb(stringdata,tablename):
 
     #將測試資料存入爬蟲TABLE
     dbclient.write_points(web_crawler_data)
+
     return ("db write Sucess")
 
 
@@ -62,7 +63,7 @@ parameter = {
 flag = 0
 preday = 0
 
-
+crawler_freq = 20
 
 #check database have data
 client = InfluxDBClient('54.180.25.155',8086,'','','stock_data')
@@ -80,14 +81,15 @@ else:#database have data and get last line date
 
 i=0
 while True:
+    starttime = time.time()
+    curr_time = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y-%m-%d %H:%M:%S.%f').split(' ')
+
     try:
         resp = requests.get(url, params=parameter,timeout=5)
         data = resp.json()      
         data = pd.DataFrame(data["data"])
         if data.empty:#no data return call spark
-            curr_time = str(curr_time).split(' ')
             print("no data")
-            curr_time = str(curr_time).split(' ')
             print(curr_time)
             os.system(f'python3 scripts/spark_predict.py --date {curr_time[0]} --time {curr_time[1]} --his_num {10}')
         else:
@@ -101,6 +103,13 @@ while True:
                 print(updatedb(dfAsString,"prediction_data"))
                 preday = dateformat
                 flag=1
+            elif (random.randint(1, 1) == 1) & (i>=1):
+                from IPython import embed
+                embed()
+                exit()
+                print("\n[ERROR - random test]")
+                print(curr_time)
+                os.system(f'python3 scripts/spark_predict.py --date {curr_time[0]} --time {curr_time[1]} --his_num {10}')
             #check datetime is same or not to wrtie back database
             else:
                 dateformat=pd.to_datetime(data["date"], format='%Y-%m-%d %H:%M:%S.%f')
@@ -114,24 +123,28 @@ while True:
                     print("prediction_data update:")
                     print(updatedb(dfAsString,"prediction_data"))
                     preday = dateformat
-                else:#over 5 second data duplicate call spark
-                    print("Before 5 second:",preday)
-                    preday = preday + datetime.timedelta(seconds=5)
-                    print("over 5 second data still duplicate")
-                    print("after 5 second:",preday)
-                    pre_time = str(preday).split(' ')
+                else:#over 30 second data duplicate call spark
+                    print(f"Before {crawler_freq} second:",preday)
+                    preday = preday + datetime.timedelta(seconds=crawler_freq)
+                    print(f"over {crawler_freq} second data still duplicate")
+                    print(f"after {crawler_freq} second:",preday)
+                    pre_time = str(preday.loc[0]).split(' ')
                     os.system(f'python3 scripts/spark_predict.py --date {pre_time[0]} --time {pre_time[1]}.0 --his_num {10}')             
             print("--------------end--------------")
             i=i+1
-            sleep(5)
+
+            # sleep(crawler_freq)
     except requests.exceptions.Timeout:#call api error call spark
         print("timeouterror")
-        curr_time = str(curr_time).split(' ')
         print(curr_time)
         os.system(f'python3 scripts/spark_predict.py --date {curr_time[0]} --time {curr_time[1]} --his_num {10}')
     except requests.exceptions.RequestException as e:#call api error call spark
         print("requesterror")
-        curr_time = str(curr_time).split(' ')
         print(curr_time)
         os.system(f'python3 scripts/spark_predict.py --date {curr_time[0]} --time {curr_time[1]} --his_num {10}')
 
+    runtime = time.time() - starttime
+    if runtime > crawler_freq:
+        print(f'Delay {runtime - crawler_freq} second')
+    else:
+        time.sleep(crawler_freq - runtime) # 剩餘要等地秒數

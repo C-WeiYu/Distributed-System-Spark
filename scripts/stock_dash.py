@@ -39,7 +39,7 @@ def update(n):
     result = client.query('select * from web_crawler_data')
     result2 = client.query('select * from prediction_data')
 
-    data = pd.DataFrame(list(result.get_points()))['value'].str.split(' ', expand=True)
+    data = pd.DataFrame(list(result.get_points()))['value'].str.split(expand=True)
     data.columns = ['amount', 'average_price', 'buy_price', 'buy_volume', 'change_price', 'change_rate', 'close', 'high', 'low', 'open', 'sell_price', 'sell_volume', 'total_amount', 'total_volume', 'volume', 'volume_ratio', 'yesterday_volume', 'date', 'time', 'stock_id', 'TickType']
     df=pd.DataFrame([])
     df['close'] = pd.to_numeric(data['close'])
@@ -67,7 +67,7 @@ def update(n):
     fig.update_yaxes(title_text = '股價')
     ############################################################################################################
 
-    data2 = pd.DataFrame(list(result2.get_points()))['value'].str.split(' ', expand=True)
+    data2 = pd.DataFrame(list(result2.get_points()))['value'].str.split(expand=True)
     data2.columns = ['amount', 'average_price', 'buy_price', 'buy_volume', 'change_price', 'change_rate', 'close', 'high', 'low', 'open', 'sell_price', 'sell_volume', 'total_amount', 'total_volume', 'volume', 'volume_ratio', 'yesterday_volume', 'date', 'time', 'stock_id', 'TickType']
     df2=pd.DataFrame([])
     df2['close'] = pd.to_numeric(data2['close'])

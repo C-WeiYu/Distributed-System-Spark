@@ -31,7 +31,7 @@ from pyspark.ml import Pipeline
 def get_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--date", help = "缺失日期", type = str, default = '2022-06-07')
+    parser.add_argument("--date", help = "缺失日期", type = str, default = '2022-06-10')
     parser.add_argument("--time", help = "缺失時間", type = str, default = '13:24:16.550')
     parser.add_argument("--his_num", help = "預測依據的筆數", type = int, default = 10)
     parser.add_argument("--his_ws", help = "預測依據的筆數", type = int, default = 3)
@@ -43,22 +43,27 @@ def get_data(client, miss_datetime, his_num, his_ws):
     data_num = his_num + his_ws -1
 
     #撈取預測TABLE的資料
-    miss_num = 5
+    miss_num = 0
     teststdata = []
+    test_time = 0
     while len(teststdata) < data_num:
-        prediction_data = client.query(f'SELECT * FROM prediction_data GROUP BY * ORDER BY DESC LIMIT {data_num + miss_num}')
+        prediction_data = client.query(f'SELECT * FROM prediction_data GROUP BY * ORDER BY DESC LIMIT {data_num*2}')
 
         teststdata = []
         for item in list(prediction_data.get_points())[::-1]:
-            dtime = datetime.strptime(' '.join(item['value'].split(' ')[-4:-2]),"%Y-%m-%d  %H:%M:%S.%f")
+            dtime = datetime.strptime(' '.join(item['value'].split()[-4:-2]),"%Y-%m-%d  %H:%M:%S.%f")
             if dtime < miss_datetime:
-                teststdata.append(item['value'].split(' ')[6]) # 只取第 6 個 close
+                teststdata.append(item['value'].split()[6]) # 只取第 6 個 close
             if len(teststdata) >= data_num:
                 break
         
         miss_num = data_num - len(teststdata)
-        print(f'{miss_num} pieces of data are missing')
         time.sleep(1)
+        if test_time ==5:
+            print(f'{miss_num} pieces of data are missing')
+            print('---------------- Spark end ----------------\n')
+            exit()
+        test_time += 1
     
     # teststdata = teststdata[::-1] #反序時間成由早到晚
     teststdata.append(teststdata[-1])
@@ -66,6 +71,7 @@ def get_data(client, miss_datetime, his_num, his_ws):
     for i in range(his_num + 1):
         tmp.append(teststdata[i: i + his_ws])
     teststockarr = np.array(tmp)
+
     teststockarr = teststockarr.astype('float32') #str to float
     stockdata = teststockarr.tolist()
 
@@ -84,11 +90,14 @@ def predict_price(miss_datetime, data, columns):
     spark.sparkContext.setLogLevel("ERROR") 
 
     # 建立SparkContext
-    df = spark.createDataFrame(data, schema = columns)
-    columns.remove('T') # Label
+    # df = spark.createDataFrame(data, schema = columns)
     # train_data, test_data = df.randomSplit([0.9, 0.1], 2) # 會亂掉
-    train_data = df.limit(df.count()-2)
-    test_data = df.subtract(train_data) # 確定是要預測的那筆
+    # train_data = df.limit(df.count()-2)
+    # test_data = df.subtract(train_data) # 確定是要預測的那筆
+
+    train_data = spark.createDataFrame(data[:-1], schema = columns)
+    test_data = spark.createDataFrame([data[-1]], schema = columns)
+    columns.remove('T') # Label
 
     #build model
     vecass = VectorAssembler(inputCols=columns, outputCol='features')
@@ -155,6 +164,7 @@ def main():
         round(DBread_timeuse, 2),
         round(DBwrite_timeuse,2),
         statu))
+    print('---------------- Spark end ----------------\n')
 
 if __name__ == "__main__":
     main()

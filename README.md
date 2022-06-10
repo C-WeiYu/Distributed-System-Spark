@@ -11,11 +11,131 @@
 - 程式碼為spark_predict.py，程式是以pyspark為基礎撰寫，由五個自訂函數組成，函數分別為:
   - get_args():用來取得預設參數，包括資料缺失的日期、時間及要預測的筆數、訓練模型所需的特徵數，而特徵則為近三筆的價格。
   ```code
+  def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--date", help = "缺失日期", type = str, default = '2022-06-10')
+    parser.add_argument("--time", help = "缺失時間", type = str, default = '13:24:16.550')
+    parser.add_argument("--his_num", help = "預測依據的筆數", type = int, default = 10)
+    parser.add_argument("--his_ws", help = "預測依據的筆數", type = int, default = 3)
+    return parser.parse_args()
   ```
   - get_data():從influxdb撈取目前時點最近20筆(data_num*2)的資料，在20筆資料中篩選出早於缺失資料的時間的近10筆資料。由於我們要預測的是股價，屬於時間序列資料，因此透過一連串資料處理，產生sliding window的資料集，作為訓練預測模型的資料。
+  ```code
+  def get_data(client, miss_datetime, his_num, his_ws):
+    start_time = time.time()
+    data_num = his_num + his_ws -1
+    
+    #撈取預測TABLE的資料
+    miss_num = 0
+    teststdata = []
+    test_time = 0
+    while len(teststdata) < data_num:
+        prediction_data = client.query(f'SELECT * FROM prediction_data GROUP BY * ORDER BY DESC LIMIT {data_num*2}')
+
+        teststdata = []
+        for item in list(prediction_data.get_points())[::-1]:
+            dtime = datetime.strptime(' '.join(item['value'].split()[-4:-2]),"%Y-%m-%d  %H:%M:%S.%f")
+            if dtime < miss_datetime:
+                teststdata.append(item['value'].split()[6]) # 只取第 6 個 close
+            if len(teststdata) >= data_num:
+                break
+        
+        miss_num = data_num - len(teststdata)
+        time.sleep(1)
+        if test_time ==5:
+            print(f'{miss_num} pieces of data are missing')
+            print('---------------- Spark end ----------------\n')
+            exit()
+        test_time += 1
+    
+
+    teststdata.append(teststdata[-1])
+    tmp = []
+    for i in range(his_num + 1):
+        tmp.append(teststdata[i: i + his_ws])
+    teststockarr = np.array(tmp)
+
+    teststockarr = teststockarr.astype('float32') #str to float
+    stockdata = teststockarr.tolist()
+
+    columns = list(range(-his_ws+1,0,1))
+    columns = map(lambda x:'T'+str(x),columns)
+    columns = list(columns)
+    columns.append('T')
+
+    return stockdata, columns, time.time() - start_time
+  ```
   - predict_price():輸入get_data產生資料集，製成dataframe，以T(當前close)作為label，近三筆的價格作為features，透過pipeline進行資料處理及訓練，訓練模型為Linear Regression，經過訓練後預測缺失資料時間的價格，將預測結果處存成json格式，並判斷預測結果是否有正確產生，若無則輸出False狀態。
+  ```code
+  def predict_price(miss_datetime, data, columns):
+    start_time = time.time()
+    # 設定SparkSession參數並建立
+    spark = SparkSession.builder.master(f'spark://{MASTER_IP}:7077').appName(f'spark-predict [{miss_datetime}]').getOrCreate()
+    spark.sparkContext.setLogLevel("ERROR") 
+
+    train_data = spark.createDataFrame(data[:-1], schema = columns)
+    test_data = spark.createDataFrame([data[-1]], schema = columns)
+    columns.remove('T') # Label
+
+    #build model
+    vecass = VectorAssembler(inputCols=columns, outputCol='features')
+    lr = LinearRegression(featuresCol = 'features', labelCol='T', maxIter=1, regParam=0.3, elasticNetParam=0)
+    lr_pipeline = Pipeline(stages=[vecass, lr])
+    
+    # 預測
+    lr_pipelineModel = lr_pipeline.fit(train_data)
+    predicted = lr_pipelineModel.transform(test_data)
+    predicted = predicted.withColumn("pred", spround(predicted.prediction, 0))
+
+    #把預測結果作成json
+    try:
+        result = [
+            {
+                "measurement" : "prediction_data",
+                "tags": {
+                    "topic": "stock2330_data"
+                },
+                "fields": {
+                    "value": 'na '*6+str(predicted.collect()[-1].pred)+' na'*10 + ' ' + str(miss_datetime) + ' 2330 *'
+                }
+            }
+        ]
+        statu = True
+    except:
+        result = []
+        statu = False
+
+    return result, time.time() - start_time, statu
+  ```
   - write_data():輸入predict_price()產生的預測結果與狀態，若狀態為True，則將預測結果寫回db的prediction_data表，否則，只印出失敗訊息不做任何動作。
+  ```code
+  def write_data(client, result, statu):
+    start_time = time.time()
+    if statu:
+        client.write_points(result)
+        print('SUCCESS')
+    else:
+        print('FALSE')
+
+    return time.time() - start_time
+  ```
   - main():依序執行將前述的四大功能，並印出各階段所花時間。
+  ```code
+  def main():
+    print('------------- Spark running -------------')
+    args = get_args()
+    miss_datetime = datetime.strptime(f"{args.date} {args.time}", "%Y-%m-%d  %H:%M:%S.%f")
+    client = InfluxDBClient('54.180.25.155',8086,'','','stock_data') #InfluxDBClient(資料庫IP,資料庫PORT,帳號,密碼,DB名稱)
+    data, columns, DBread_timeuse = get_data(client, miss_datetime, args.his_num, args.his_ws)
+    result, spark_timeuse, statu = predict_price(miss_datetime, data, columns)
+    DBwrite_timeuse = write_data(client, result, statu)
+    print('--- Spark_timeuse: %.2f (sec) | DBread_timeuse: %.2f (sec)| DBwrite_timeuse: %.2f (sec) | Statu: %s ---' % (
+        round(spark_timeuse, 2),
+        round(DBread_timeuse, 2),
+        round(DBwrite_timeuse,2),
+        statu))
+    print('---------------- Spark end ----------------\n')
+  ```
 ### Visual Design
 
 ## Dev Environment

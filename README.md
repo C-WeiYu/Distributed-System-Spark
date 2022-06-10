@@ -159,7 +159,7 @@ vagrant halt
 |莊崴宇|資科碩一|110753117| 簡報、github | [C-WeiYu](https://github.com/C-WeiYu)|
 |何彥南|資科碩一|110753202| Spark 叢集、github、Demo 影片| [aaron1aaron2](https://github.com/aaron1aaron2)|
 |姚惠馨|資科碩一|110753135| Dashboard | [Hsin0705](https://github.com/Hsin0705)|
-|吳仁凱|資科碩一|110753157| Pyspark | [k0341055](https://github.com/k0341055)|
+|吳仁凱|資科碩一|110753157| Pyspark(數據處理與分析)| [k0341055](https://github.com/k0341055)|
 |張修誠|資科碩一|110753165| 爬蟲 | [juzowa](https://github.com/juzowa)|
 |吳泓澈|資科碩一|107306009| InfluxDB | [Hunter107306009](https://github.com/Hunter107306009)|
 

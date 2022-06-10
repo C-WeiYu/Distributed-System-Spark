@@ -65,7 +65,7 @@ Expand-Archive .\influxdb-1.8.6_windows_amd64.zip -DestinationPath 'C:\Program F
 (260行) bind-address = ":8086"
 ```
 
-3.安裝NSSM，並執行
+3. 安裝NSSM，並執行
 ```shell
 nssm.exe install
 ```
@@ -74,9 +74,15 @@ Path的路徑為influxd.exe的檔案位置
 Arguments的路徑為influxdb.conf的檔案位置
 ```
 
-4.
+4. 在nssm/win64的目錄下，執行
+```shell
+sc start (Service name)
+```
 
-3. 在C:\Program Files\InfluxData\influxdb\influxdb-1.8.6-1(預設路徑)底下執行以下指令，啟動
+5.在C:\Program Files\InfluxData\influxdb\influxdb-1.8.6-1(預設路徑)執行以下指令，啟動InfluxDB Server
+```shell
+influxd.exe --config influxdb.conf
+```
 
 ### Local computer(Win10)
 1. 建立乾淨的 python 環境。(conda 為例也可以使用 virtualenv)

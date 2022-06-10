@@ -52,11 +52,31 @@ sudo pip3 install -r requirements.txt
 ```
 
 ### InfluxDB(AWS)(Win10)
-1.打開Windows PowerShell，貼上以下連結，安裝influxdb
+1. 打開Windows PowerShell，貼上以下連結，安裝influxdb
 ```shell
 wget https://dl.influxdata.com/influxdb/releases/influxdb-1.8.6_windows_amd64.zip -UseBasicParsing -OutFile influxdb-1.8.6_windows_amd64.zip
 Expand-Archive .\influxdb-1.8.6_windows_amd64.zip -DestinationPath 'C:\Program Files\InfluxData\influxdb\'
 ```
+
+2. 修改C:\Program Files\InfluxData\influxdb\influxdb-1.8.6-1(預設路徑)底下的influxdb.conf
+```shell
+(45行、48行) 可修改預設檔案夾路徑 
+(251行) enabled = true
+(260行) bind-address = ":8086"
+```
+
+3.安裝NSSM，並執行
+```shell
+nssm.exe install
+```
+```shell
+Path的路徑為influxd.exe的檔案位置
+Arguments的路徑為influxdb.conf的檔案位置
+```
+
+4.
+
+3. 在C:\Program Files\InfluxData\influxdb\influxdb-1.8.6-1(預設路徑)底下執行以下指令，啟動
 
 ### Local computer(Win10)
 1. 建立乾淨的 python 環境。(conda 為例也可以使用 virtualenv)

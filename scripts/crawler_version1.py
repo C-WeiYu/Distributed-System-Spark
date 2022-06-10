@@ -103,10 +103,7 @@ while True:
                 print(updatedb(dfAsString,"prediction_data"))
                 preday = dateformat
                 flag=1
-            elif (random.randint(1, 1) == 1) & (i>=1):
-                from IPython import embed
-                embed()
-                exit()
+            elif (random.randint(1, 5) == 1) & (i>=15):
                 print("\n[ERROR - random test]")
                 print(curr_time)
                 os.system(f'python3 scripts/spark_predict.py --date {curr_time[0]} --time {curr_time[1]} --his_num {10}')

@@ -51,8 +51,12 @@ cd Distributed-System-Spark
 sudo pip3 install -r requirements.txt
 ```
 
-### InfluxDB(AWS)
-
+### InfluxDB(AWS)(Win10)
+1.打開Windows PowerShell，貼上以下連結，安裝influxdb
+```shell
+wget https://dl.influxdata.com/influxdb/releases/influxdb-1.8.6_windows_amd64.zip -UseBasicParsing -OutFile influxdb-1.8.6_windows_amd64.zip
+Expand-Archive .\influxdb-1.8.6_windows_amd64.zip -DestinationPath 'C:\Program Files\InfluxData\influxdb\'
+```
 
 ### Local computer(Win10)
 1. 建立乾淨的 python 環境。(conda 為例也可以使用 virtualenv)

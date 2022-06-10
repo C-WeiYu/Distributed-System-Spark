@@ -115,7 +115,7 @@ def predict_price(miss_datetime, data, columns):
     # rmse = evaluator.evaluate(predicted)
     # print('rmse :',rmse)
 
-    #把預測結果寫入db的test表中
+    #把預測結果寫回prediction_data表中
     try:
         result = [
             {

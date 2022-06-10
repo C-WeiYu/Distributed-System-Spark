@@ -102,7 +102,7 @@ vagrant halt
 ```
 
 ## Demo
-
+[![Demo Video](https://img.youtube.com/vi/76fHSBQzw_Y/0.jpg)](https://www.youtube.com/watch?v=76fHSBQzw_Y)
 
 ## reference
 - Spark 叢集(Standalone Mode)

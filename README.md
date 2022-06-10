@@ -84,7 +84,7 @@ sc start (Service name)
 influxd.exe --config influxdb.conf
 ```
 
-6.在aws的控制台中，對外開放8086 port
+6.在aws控制台的安全設定中，對外開放8086 port
 
 7.在Windows防火牆的進階設定中，對外開放8086 port
 

@@ -84,6 +84,11 @@ sc start (Service name)
 influxd.exe --config influxdb.conf
 ```
 
+6.在aws的控制台中，對外開放8086 port
+
+7.在Windows防火牆的進階設定中，對外開放8086 port
+
+
 ### Local computer(Win10)
 1. 建立乾淨的 python 環境。(conda 為例也可以使用 virtualenv)
 ```shell

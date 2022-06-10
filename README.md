@@ -79,14 +79,14 @@ Arguments的路徑為influxdb.conf的檔案位置
 sc start (Service name)
 ```
 
-5.在C:\Program Files\InfluxData\influxdb\influxdb-1.8.6-1(預設路徑)執行以下指令，啟動InfluxDB Server
+5. 在C:\Program Files\InfluxData\influxdb\influxdb-1.8.6-1(預設路徑)執行以下指令，啟動InfluxDB Server
 ```shell
 influxd.exe --config influxdb.conf
 ```
 
-6.在aws控制台的安全設定中，對外開放8086 port
+6. 在aws控制台的安全設定中，對外開放8086 port
 
-7.在Windows防火牆的進階設定中，對外開放8086 port
+7. 在Windows防火牆的進階設定中，對外開放8086 port
 
 
 ### Local computer(Win10)

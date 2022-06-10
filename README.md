@@ -10,7 +10,7 @@
 #### Regression prediction
 - 程式碼為spark_predict.py，程式是以pyspark為基礎撰寫，由五個自訂函數組成，函數分別為:
   - get_args():用來取得預設參數，包括資料缺失的日期、時間及要預測的筆數、訓練模型所需的特徵數，而特徵則為近三筆的價格。
-  - get_data():從influxdb撈取目前時點最近20筆(data_num*2)的資料，在20資料中篩選出早於缺失資料的時間的近10筆資料。由於我們要預測的是股價，屬於時間序類資料，因此透過一連串資料處理，產生sliding window的資料集，作為訓練預測模型的資料。
+  - get_data():從influxdb撈取目前時點最近20筆(data_num*2)的資料，在20筆資料中篩選出早於缺失資料的時間的近10筆資料。由於我們要預測的是股價，屬於時間序類資料，因此透過一連串資料處理，產生sliding window的資料集，作為訓練預測模型的資料。
   - predict_price():輸入get_data產生資料集，製成pyspark的dataframe，以T(當前close)作為label，近三筆的價格作為features，透過pipeline進行資料處理及訓練，訓練模型為Linear Regression，經過訓練後預測缺失資料時間的價格，將預測結果處存成json格式，並判斷預測結果是否有正確產生，若無則輸出False狀態。
   - write_data():輸入predict_price()產生的預測結果與狀態，若狀態為True，則將預測結果寫回db的prediction_data表，否則，只印出失敗訊息不做任何動作。
   - main():依序執行將前述的四大功能，並印出各階段所花時間。

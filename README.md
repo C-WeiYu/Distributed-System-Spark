@@ -96,6 +96,11 @@ python3 scripts/crawler_version1.py
 ```
 - 註: 因目標是爬取股市資料，9:00 -13:30 才會有資料
 
+### Step4: 結束後記得關 VM
+```shell
+vagrant halt
+```
+
 ## Demo
 
 

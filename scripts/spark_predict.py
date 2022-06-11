@@ -66,7 +66,8 @@ def get_data(client, miss_datetime, his_num, his_ws):
         test_time += 1
     
     # teststdata = teststdata[::-1] #反序時間成由早到晚
-    teststdata.append(teststdata[-1])
+#     teststdata.append(teststdata[-1])
+    teststdata.append(0)
     tmp = []
     for i in range(his_num + 1):
         tmp.append(teststdata[i: i + his_ws])

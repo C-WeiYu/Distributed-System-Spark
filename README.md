@@ -3,26 +3,29 @@
 ## Introduction
 ![](img/%E6%9E%B6%E6%A7%8B%E5%9C%96.v3.png)
 ### Stock Data Crawler
-每20秒call一次 [FinMind API](https://api.finmindtrade.com/docs)，並存到 influxDB，形成時間序列資料。當無法在時間內爬取到新資料(斷網、API故障)，會視為缺失並且 call spark 去回歸預測這筆缺失的資料。本專案使用 `2330(台積電)` 為例，並以 API 回傳的 `close` 值為預測目標。
+每20秒call一次 [FinMind API](https://api.finmindtrade.com/docs)，並存到 influxDB，形成時間序列資料。當無法在時間內爬取到新資料(斷網、API故障)，會視為缺失並且以資料缺失的日期為參數去 call spark 來預測這筆缺失的資料。本專案使用 `2330(台積電)` 為例，並以 API 回傳的 `close` 值為預測目標。
 
 ### InfluxDB
 在資料的儲存上，我們選擇使用時間序列資料庫 - InfluxDB。並將其建立在 AWS 的 EC2(Win) 上，使用公開 IP 的方式和三方程式互動。
+在資料庫這部分我們設計兩個 table `web_crawler_data` 和 `prediction_data`，兩個 table 都會儲存爬蟲的資料，差別是 `prediction_data` 會額外儲存 spark 預測的缺失值。
 
 ### Spark Cluster & Regression Prediction
 #### Regression prediction
 - 程式碼為spark_predict.py，程式是以pyspark為基礎撰寫，由五個自訂函數組成，函數分別為:
-  - get_args():用來取得預設參數，包括資料缺失的日期、時間及要預測的筆數、訓練模型所需的特徵數，而特徵則為近三筆的價格。
+  - `get_args()`: 用來取得預設參數，包括資料缺失的日期、時間及要預測的筆數、訓練模型所需的特徵數，而特徵則為近三筆的價格。
 
-  - get_data():從influxdb撈取目前時點最近20筆(data_num*2)的資料，在20筆資料中篩選出早於缺失資料的時間的近10筆資料。由於我們要預測的是股價，屬於時間序列資料，因此透過一連串資料處理，產生sliding window的資料集，作為訓練預測模型的資料。
+  - `get_data()`: 從influxdb撈取目前時點最近20筆(data_num*2)的資料，在20筆資料中篩選出早於缺失資料的時間的近10筆資料。由於我們要預測的是股價，屬於時間序列資料，因此透過一連串資料處理，產生sliding window的資料集，作為訓練預測模型的資料。
 
-  - predict_price():輸入get_data產生資料集，製成dataframe，以T(當前close)作為label，近三筆的價格作為features，透過pipeline進行資料處理及訓練，訓練模型為Linear Regression，經過訓練後預測缺失資料時間的價格，將預測結果處存成json格式，並判斷預測結果是否有正確產生，若無則輸出False狀態。
+  - `predict_price()`: 輸入get_data產生資料集，製成dataframe，以T(當前close)作為label，近三筆的價格作為features，透過pipeline進行資料處理及訓練，訓練模型為Linear Regression，經過訓練後預測缺失資料時間的價格，將預測結果處存成json格式，並判斷預測結果是否有正確產生，若無則輸出False狀態。
 
-  - write_data():輸入predict_price()產生的預測結果與狀態，若狀態為True，則將預測結果寫回db的prediction_data表，否則，只印出失敗訊息不做任何動作。
+  - `write_data()`: 輸入predict_price()產生的預測結果與狀態，若狀態為True，則將預測結果寫回db的prediction_data表，否則，只印出失敗訊息不做任何動作。
 
-  - main():依序執行將前述的四大功能，並印出各階段所花時間。
+  - `main()`:依序執行將前述的四大功能，並印出各階段所花時間。
 
 ### Visual Design
 透過Plotly套件將資料庫讀取的DataFrame資料視覺化，並利用Dash套件將視覺化圖表呈現於網站，由於資料為時間序列資料，會不停地更新，因此設定每五秒從資料庫更新視覺化資料，即時呈現資料變動。
+其中上下分別為 `原始爬蟲資料(web_crawler_data)` 與 `經過 spark 填補的資料 (prediction_data)`，透過這種方式可以很值觀的比較兩者差別。
+
 ## Dev Environment
 ### Spark cluster(VM - Ubuntu)
 1. 先安裝好 [Vagrant](https://www.vagrantup.com/) 、 [git](https://git-scm.com/) 、[git-lfs](https://git-lfs.github.com/)

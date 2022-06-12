@@ -1,5 +1,5 @@
 # Distributed-System-Spark
-本專案將以Spark的MLlib設計爬蟲資料缺失自動補救機制，基本流程我們透過FinMind API爬取每日股票，將資料存入Influx Database，再以Plotly API 和 Dash API進行資料視覺化；當爬蟲部分出現錯誤而無法依序取得資料時，系統將自動呼叫Spark的MLlib API，此時MLlib會存取Database的資料並進行預測，再將預測結果寫回Database，以下為我們整體專案的介紹和相關程式的安裝流程。
+本專案以Spark-MLlib API實現爬蟲資料缺失自動補救機制，先透過FinMind API爬取每日股票，將資料存入Influx Database，當爬蟲部分出現錯誤而無法依序取得資料時，系統將自動呼叫MLlib API存取Database資料並進行預測，再將預測結果寫回Database，最後以Plotly API 和 Dash API進行資料視覺化比較有補救與未補救的差異，以下為我們整體專案的介紹和相關API的安裝流程。
 ## Introduction
 ![](img/%E6%9E%B6%E6%A7%8B%E5%9C%96.v3.png)
 ### Stock Data Crawler

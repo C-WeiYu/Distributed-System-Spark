@@ -10,6 +10,10 @@
 在資料庫這部分我們設計兩個 table `web_crawler_data` 和 `prediction_data`，兩個 table 都會儲存爬蟲的資料，差別是 `prediction_data` 會額外儲存 spark 預測的缺失值。
 
 ### Spark Cluster & Regression Prediction
+#### Spark Cluster
+在 spark 的叢集上，我們選擇使用 vagrant 的方式在一台電腦建立多個 VM 作為節點。其中包含一個主節點(master)、兩個工作節點(worker)，每個節點分配 2g 記憶體和3顆 cpu。
+在首次 `vagrant up` 時 master 節點用 `ssh-keygen` 產生公鑰，並且複製到其他 worker 節點的 `/root/.ssh` 底下，並在 `/etc/host` 底下加入各節點的 IP 資訊，方便後續叢集的連接。此外，還會自動安裝 packages 底下預先下載好的 spark 和 java 的壓縮檔，並且將 spark 和 java 環境變數加入到使用者設定檔 `.bashrc` 底下，讓我們可以在 user 的資料夾裡直接執行 spark 環境。
+
 #### Regression prediction
 - 程式碼為spark_predict.py，程式是以pyspark為基礎撰寫，由五個自訂函數組成，函數分別為:
   - `get_args()`: 用來取得預設參數，包括資料缺失的日期、時間及要預測的筆數、訓練模型所需的特徵數，而特徵則為近三筆的價格。

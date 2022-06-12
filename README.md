@@ -3,7 +3,15 @@
 ## Introduction
 ![](img/%E6%9E%B6%E6%A7%8B%E5%9C%96.v3.png)
 ### Stock Data Crawler
-
+每20秒call一次 [FinMind API](https://api.finmindtrade.com/docs)
+Ø 每日股票資訊
+→ 欄位資訊 :
+amount、average_price、buy_price、buy_volume、change_price、Change_rate、
+close、high、low、open、sell_price、sell_volume、total_amount、total_volume、
+volume、volume_ratio、yesterday_volume、date、stock_id、TickType
+Ø 
+→ 金融開源資料庫
+→ 以資料時間和收盤價進行視覺化
 ### InfluxDB
 
 ### Spark Cluster & Regression Prediction

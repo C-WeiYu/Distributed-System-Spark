@@ -3,16 +3,10 @@
 ## Introduction
 ![](img/%E6%9E%B6%E6%A7%8B%E5%9C%96.v3.png)
 ### Stock Data Crawler
-每20秒call一次 [FinMind API](https://api.finmindtrade.com/docs)
-Ø 每日股票資訊
-→ 欄位資訊 :
-amount、average_price、buy_price、buy_volume、change_price、Change_rate、
-close、high、low、open、sell_price、sell_volume、total_amount、total_volume、
-volume、volume_ratio、yesterday_volume、date、stock_id、TickType
-Ø 
-→ 金融開源資料庫
-→ 以資料時間和收盤價進行視覺化
+每20秒call一次 [FinMind API](https://api.finmindtrade.com/docs)，並存到 influxDB，形成時間序列資料。當無法在時間內爬取到新資料(斷網、API故障)，會視為缺失並且 call spark 去回歸預測這筆缺失的資料。本專案使用 `2330(台積電)` 為例，並以 API 回傳的 `close` 值為預測目標。
+
 ### InfluxDB
+在資料的儲存上，我們選擇使用時間序列資料庫 - InfluxDB。並將其建立在 AWS 的 EC2(Win) 上，使用公開 IP 的方式和三方程式互動。
 
 ### Spark Cluster & Regression Prediction
 #### Regression prediction

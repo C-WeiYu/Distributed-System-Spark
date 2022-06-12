@@ -122,7 +122,7 @@ pip install -r requirements.txt
 |Python| 3.6.9 |||
 |Vagrant| 2.2.19 | [Vagrant by HashiCorp (vagrantup.com)](https://www.vagrantup.com/) | 需先自行安裝 |
 |Ubuntu| Ubuntu 18.04.6 LTS (Bionic Beaver) | [Discover Vagrant Boxes - Vagrant Cloud (vagrantup.com)](https://app.vagrantup.com/boxes/search?utf8=%E2%9C%93&sort=downloads&provider=&q=ubuntu%2Fbionic64+) | 透過 vagrant 安裝 |
-|InfluxDB||||
+|InfluxDB| 1.8.6 | [InfluxDB: Open Source Time Series Database](https://www.influxdata.com/)||
 
 ## Quick start
 1. 在開始前，請確定設定好環境(看上一章 [Dev Environment](README.md#dev-environment))
@@ -169,14 +169,10 @@ vagrant halt
     - [Ruby 教程 | 菜鸟教程 (runoob.com)](https://www.runoob.com/ruby/ruby-tutorial.html)
   - Pyspark
     - [How to Spark Submit Python | PySpark File (.py)? - Spark by {Examples} (sparkbyexamples.com)](https://sparkbyexamples.com/pyspark/spark-submit-python-file/)
-- 爬蟲
-
-
-- influxdb
-
 - 視覺化 Dashboard
     - plotly + Dash
       - [初學Pandas+Plotly+Dash大禮包](https://weilihmen.medium.com/%E5%88%9D%E5%AD%B8pandas-ploty-dash%E5%A4%A7%E7%A6%AE%E5%8C%85-8661c04e67b7)
+
 ## Contributors
 |組員|系級|學號|工作分配|github|
 |-|-|-|-|:-:|

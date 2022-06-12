@@ -22,7 +22,7 @@
   - main():依序執行將前述的四大功能，並印出各階段所花時間。
 
 ### Visual Design
-
+透過Plotly套件將資料庫讀取的DataFrame資料視覺化，並利用Dash套件將視覺化圖表呈現於網站，由於資料為時間序列資料，會不停地更新，因此設定每五秒從資料庫更新視覺化資料，即時呈現資料變動。
 ## Dev Environment
 ### Spark cluster(VM - Ubuntu)
 1. 先安裝好 [Vagrant](https://www.vagrantup.com/) 、 [git](https://git-scm.com/) 、[git-lfs](https://git-lfs.github.com/)
